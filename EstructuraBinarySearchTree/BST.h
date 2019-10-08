@@ -1,5 +1,7 @@
 #pragma once
 #include "NodeT.h"
+#include <iostream>
+using namespace std;
 
 class BST {
 private:
@@ -7,6 +9,13 @@ private:
 	int howManyChildren(NodeT* r);
 	int succ(NodeT* r);
 	int pred(NodeT* r);
+	void preorden(NodeT* root);
+	void inorden(NodeT* r);
+	void postorden(NodeT* r);
+	void destruye(NodeT* r);
+
+	void printLeaves(NodeT *r);
+	int countPreorden(NodeT *r);
 
 public:
 	BST();
@@ -15,9 +24,7 @@ public:
 	void add(int data);
 	void remove(int data);
 	void print(int tipo);
-	//1 - Imprime en preorden
-	//2 - Imprime en inorden
-	//3 - Imprime en postorden
+	int count();
 };
 
 BST::BST() {
@@ -25,7 +32,7 @@ BST::BST() {
 }
 
 BST::~BST() {
-
+	destruye(root);
 }
 
 int BST::howManyChildren(NodeT* r) {
@@ -84,7 +91,7 @@ void BST::add(int data) {
 	if (father == nullptr) {
 		root = new NodeT(data);
 	}
-	if (father->getData() > data) {
+	else if (father->getData() > data) {
 		father->setLeft(new NodeT(data));
 	}
 	else {
@@ -103,7 +110,7 @@ void BST::remove(int data) {
 	}
 
 	//Si no está el dato
-	if (curr = nullptr) {
+	if (curr == nullptr) {
 		return;
 	}
 	int cantHijos = howManyChildren(curr);
@@ -162,3 +169,94 @@ void BST::remove(int data) {
 	}
 	}
 }
+
+void BST::postordenPrint(NodeT* r) { //--------------------------------------------------------
+	if (r != nullptr) {
+		postordenPrint(r->getLeft());
+		postordenPrint(r->getRight());
+		if (r->getLeft() == nullptr && r->getRight() == nullptr) {
+			cout << r->getData() << " ";
+		}
+	}
+}
+
+void BST::preorden(NodeT* r) {
+	if (r != nullptr) {
+		cout << r->getData() << " ";
+		preorden(r->getLeft());
+		preorden(r->getRight());
+	}
+}
+
+void BST::inorden(NodeT* r) {
+	if (r != nullptr) {
+		inorden(r->getLeft());
+		cout << r->getData() << " ";
+		inorden(r->getRight());
+	}
+}
+
+void BST::postorden(NodeT* r) {
+	if (r != nullptr) {
+		postorden(r->getLeft());
+		postorden(r->getRight());
+		cout << r->getData() << " ";
+	}
+}
+
+void BST::destruye(NodeT* r) {
+	if (r != nullptr) {
+		destruye(r->getLeft());
+		destruye(r->getRight());
+		delete r;
+	}
+}
+
+void BST::printLeaves(NodeT* r) {
+	if (r != nullptr) {
+		if (r->getLeft() == nullptr && r->getRight() == nullptr) {
+			cout << r->getData() << " ";
+		}
+		else {
+			printLeaves(r->getLeft());
+			printLeaves(r->getRight());
+		}
+	}
+}
+
+void BST::print(int tipo) {
+	switch (tipo) {
+	case 1: preorden(root);
+			break;
+	case 2: inorden(root);
+			break;
+	case 3: postorden(root);
+			break;
+	case 4: printLeaves(root);
+			break;
+	}
+}
+
+int BST::countPreorden(NodeT* r) {
+	if (r == nullptr) {
+		return 0;
+	}
+	return 1 + countPreorden(r->getLeft()) + countPreorden(r->getRight());
+}
+
+int BST::count() {
+	return countPreorden(root);
+}
+
+/* void BST::printLeaves() {
+	postordenPrint(root);
+} */
+
+/* int BST::numNodos(NodeT* r, int &suma) {
+	if (r != nullptr) {
+		numNodos(r->getLeft(), suma);
+		numNodos(r->getRight(), suma);
+		suma++;
+
+	}
+} */
