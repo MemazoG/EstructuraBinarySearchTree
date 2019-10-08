@@ -1,6 +1,10 @@
 #pragma once
 #include "NodeT.h"
+#include <vector>
+#include <stack>
+#include <queue>
 #include <iostream>
+
 using namespace std;
 
 class BST {
@@ -25,6 +29,10 @@ public:
 	void remove(int data);
 	void print(int tipo);
 	int count();
+	//TAREA 1
+	int  height();
+	vector<int> ancestors(int num);
+	int whatLevelAmI(int num);
 };
 
 BST::BST() {
@@ -170,6 +178,7 @@ void BST::remove(int data) {
 	}
 }
 
+/*
 void BST::postordenPrint(NodeT* r) { //--------------------------------------------------------
 	if (r != nullptr) {
 		postordenPrint(r->getLeft());
@@ -178,7 +187,7 @@ void BST::postordenPrint(NodeT* r) { //-----------------------------------------
 			cout << r->getData() << " ";
 		}
 	}
-}
+} */
 
 void BST::preorden(NodeT* r) {
 	if (r != nullptr) {
@@ -246,6 +255,52 @@ int BST::countPreorden(NodeT* r) {
 
 int BST::count() {
 	return countPreorden(root);
+}
+
+int BST::height() {
+	return 1;
+}
+
+vector<int> BST::ancestors(int num) {
+	vector<int> ancestros;
+	stack<int> myStack;
+	NodeT* curr = root;
+	bool found = false;
+	while (curr != nullptr && !found) {
+		if (curr->getData() == num) {
+			found = true;
+		}
+		else {
+			myStack.push(curr->getData());
+			curr = (curr->getData() > num) ?
+				curr->getLeft() : curr->getRight();
+		}
+	}
+
+	if (found) {
+		while (!myStack.empty()) {
+			ancestros.push_back(myStack.top());
+			myStack.pop();
+		}
+	}
+	return ancestros;
+}
+
+int BST::whatLevelAmI(int num) {
+	int level = 0;
+	NodeT* curr = root;
+	bool found = false;
+	while (curr != nullptr && !found) {
+		if (curr->getData() == num) {
+			found = true;
+		}
+		else {
+			level++;
+			curr = (curr->getData() > num) ?
+				curr->getLeft() : curr->getRight();
+		}
+	}
+	return found ? level : -1;
 }
 
 /* void BST::printLeaves() {
