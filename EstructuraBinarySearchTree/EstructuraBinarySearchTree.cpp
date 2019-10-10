@@ -19,6 +19,7 @@ int main()
 	miArbol.add(22);
 	miArbol.add(26);
 
+
 	//miArbol.print(1);
 
 	vector<int> ancestros = miArbol.ancestors(23);
@@ -30,4 +31,10 @@ int main()
 	cout << endl;
 
 	cout << "NIVEL DEL n/a: " << miArbol.whatLevelAmI(666) << endl;
+
+	cout << "PRINT POR NIVELES" << endl;
+	miArbol.print(5);
+
+	cout << endl;
+	cout << "HEIGHT: " << miArbol.height() << endl;
 }

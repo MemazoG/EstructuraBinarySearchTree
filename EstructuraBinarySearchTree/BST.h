@@ -16,8 +16,9 @@ private:
 	void preorden(NodeT* root);
 	void inorden(NodeT* r);
 	void postorden(NodeT* r);
+	void printLevels();
 	void destruye(NodeT* r);
-
+	int  heightTree(NodeT* r);
 	void printLeaves(NodeT *r);
 	int countPreorden(NodeT *r);
 
@@ -233,6 +234,22 @@ void BST::printLeaves(NodeT* r) {
 	}
 }
 
+void BST::printLevels() {
+	if (root == nullptr) { return; }
+	queue<NodeT*> q;
+	q.push(root);
+	while (!q.empty()) {
+		cout << q.front()->getData() << " ";
+		if (q.front()->getLeft() != nullptr) {
+			q.push(q.front()->getLeft());
+		}
+		if (q.front()->getRight() != nullptr) {
+			q.push(q.front()->getRight());
+		}
+		q.pop();
+	}
+}
+
 void BST::print(int tipo) {
 	switch (tipo) {
 	case 1: preorden(root);
@@ -243,6 +260,7 @@ void BST::print(int tipo) {
 			break;
 	case 4: printLeaves(root);
 			break;
+	case 5: printLevels();
 	}
 }
 
@@ -257,8 +275,19 @@ int BST::count() {
 	return countPreorden(root);
 }
 
+int BST::heightTree(NodeT *r) {
+	if (r == nullptr) {
+		return 0;
+	}
+	else {
+		int left = heightTree(r->getLeft());
+		int right = heightTree(r->getRight());
+		return (left > right) ? left+1 : right+1;
+	}
+}
+
 int BST::height() {
-	return 1;
+	return heightTree(root);
 }
 
 vector<int> BST::ancestors(int num) {
