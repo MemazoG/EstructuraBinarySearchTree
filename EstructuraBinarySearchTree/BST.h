@@ -21,6 +21,8 @@ private:
 	int  heightTree(NodeT* r);
 	void printLeaves(NodeT *r);
 	int countPreorden(NodeT *r);
+	void inordenQueue(NodeT* r, queue<int> &q);
+	NodeT* copyBST(NodeT* r);
 
 public:
 	BST();
@@ -34,6 +36,13 @@ public:
 	int  height();
 	vector<int> ancestors(int num);
 	int whatLevelAmI(int num);
+
+	//TAREA 2
+	int maxWidth();
+	int nearestRelative(int num1, int num2);
+	BST(BST& otro);
+	bool operator==(BST& otro);
+	queue<int> toQueue();
 };
 
 BST::BST() {
@@ -234,6 +243,7 @@ void BST::printLeaves(NodeT* r) {
 	}
 }
 
+//TAREA 1 - PRINT BY LEVELS
 void BST::printLevels() {
 	if (root == nullptr) { return; }
 	queue<NodeT*> q;
@@ -275,6 +285,7 @@ int BST::count() {
 	return countPreorden(root);
 }
 
+//TAREA 1 - HEIGHT
 int BST::heightTree(NodeT *r) {
 	if (r == nullptr) {
 		return 0;
@@ -286,10 +297,12 @@ int BST::heightTree(NodeT *r) {
 	}
 }
 
+//TAREA 1 - HEIGHT
 int BST::height() {
 	return heightTree(root);
 }
 
+// TAREA 1 - ANCESTORS
 vector<int> BST::ancestors(int num) {
 	vector<int> ancestros;
 	stack<int> myStack;
@@ -314,7 +327,7 @@ vector<int> BST::ancestors(int num) {
 	}
 	return ancestros;
 }
-
+//TAREA 1 - WHAT LEVEL AM I
 int BST::whatLevelAmI(int num) {
 	int level = 0;
 	NodeT* curr = root;
@@ -332,15 +345,107 @@ int BST::whatLevelAmI(int num) {
 	return found ? level : -1;
 }
 
-/* void BST::printLeaves() {
-	postordenPrint(root);
-} */
 
-/* int BST::numNodos(NodeT* r, int &suma) {
+//TAREA 2
+void BST::inordenQueue(NodeT* r, queue<int> &q) {
 	if (r != nullptr) {
-		numNodos(r->getLeft(), suma);
-		numNodos(r->getRight(), suma);
-		suma++;
-
+		inordenQueue(r->getRight(), q);
+		q.push(r->getData());
+		inordenQueue(r->getLeft(), q);
 	}
-} */
+}
+
+queue<int> BST::toQueue() {
+	queue<int> q;
+	inordenQueue(root, q);
+	return q;
+}
+
+int BST::nearestRelative(int num1, int num2) {
+	if (root->getData() == num1 || root->getData() == num2) {
+		return NULL;
+	}
+	int nearest;
+	NodeT* curr = root;
+	while (curr->getData() != num1 && curr->getData() != num2) {
+		nearest = curr->getData();
+		if (num1 > curr->getData() && num2 > curr->getData()) {
+			//SE QUE ME TENGO QUE MOVER A LA DERECHA
+			if (curr->getRight()->getData() == num1 || curr->getRight()->getData() == num2) {
+				return curr->getData();
+			}
+			else {
+				curr = curr->getRight();
+			}
+		} else if ( (num1 > curr->getData() && num2 < curr->getData()) || (num1 < curr->getData() && num2 > curr->getData()) ) {
+			//CURR ES EL NEAREST RELATIVE
+			return curr->getData();
+		}
+		else if (num1 < curr->getData() && num2 < curr->getData()) {
+			//SE QUE ME TENGO QUE MOVER A LA IZQUIERDA
+			if (curr->getLeft()->getData() == num1 || curr->getLeft()->getData() == num2) {
+				return curr->getData();
+			}
+			else {
+				curr = curr->getLeft();
+			}
+		}
+	}
+}
+
+NodeT* BST::copyBST(NodeT *r) {
+	if (r == nullptr) {
+		return nullptr;
+	}
+	else {
+		NodeT* node = new NodeT(r->getData());
+		node->setLeft(copyBST(r->getLeft()));
+		node->setRight(copyBST(r->getRight()));
+		return node;
+	}
+}
+
+BST::BST(BST& otro) {
+	root = copyBST(otro.root);
+ }
+
+bool BST::operator==(BST& otro) {
+	queue<int> q1 = toQueue();
+	queue<int> q2 = otro.toQueue();
+
+	while (!q1.empty() && !q2.empty()) {
+		if (q1.front() != q2.front())
+			return false;
+		q1.pop();
+		q2.pop();
+	}
+	return true;
+}
+
+int BST::maxWidth() {
+	if (root == nullptr) {
+		return 0;
+	}
+	queue<NodeT*> q;
+	q.push(root);
+	int MaxW = 0, width;
+	
+	while (!q.empty()) {
+		width = q.size();
+		if (width > MaxW) {
+			MaxW = width;
+		}
+		while (width > 0) {
+			if (q.front()->getLeft() != nullptr) {
+				q.push(q.front()->getLeft());
+			}
+			if (q.front()->getRight() != nullptr) {
+				q.push(q.front()->getRight());
+			}
+			q.pop();
+			width--;
+		}
+	}
+	return MaxW;
+}
+

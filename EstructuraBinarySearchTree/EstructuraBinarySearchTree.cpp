@@ -19,22 +19,46 @@ int main()
 	miArbol.add(22);
 	miArbol.add(26);
 
-
-	//miArbol.print(1);
-
-	vector<int> ancestros = miArbol.ancestors(23);
-
- 	cout << "SIZE: " << ancestros.size() << endl;
- 	for (int i = 0; i < ancestros.size(); i++) {
- 		cout << ancestros[i] << " ";
+	//PRUEBA toQueue()
+	cout << "*****PRUEBA toQueue()*****" << endl;
+	queue<int> q = miArbol.toQueue();
+	while (!q.empty()) {
+		cout << q.front() << " ";
+		q.pop();
 	}
 	cout << endl;
 
-	cout << "NIVEL DEL n/a: " << miArbol.whatLevelAmI(666) << endl;
+	//PRUEBA nearestRelative(x, y)
+	cout << "*****PRUEBA nearestRelative(22, 25)" << endl;
+	cout << miArbol.nearestRelative(22, 25) << endl;
 
-	cout << "PRINT POR NIVELES" << endl;
-	miArbol.print(5);
+	//PRUEBA operator==
+	BST tree;
+	tree.add(14);
+	tree.add(10);
+	tree.add(20);
+	tree.add(5);
+	tree.add(7);
+	tree.add(12);
+	tree.add(18);
+	tree.add(25);
+	tree.add(23);
+	tree.add(22);
+	tree.add(29);
 
+	if (miArbol==tree) {
+		cout << "SI" << endl;
+	}
+	else
+		cout << "NO" << endl;
+
+	//PRUEBA maxWidth()
+	cout << "*****PRUEBA maxWidth()*****" << endl;
+	cout << miArbol.maxWidth() << endl;
+
+	//PRUEBA CopyConstructor
+	cout << "*****PRUEBA CopyConstructor*****" << endl;
+	BST nuevoBST(miArbol);
+	nuevoBST.print(2);
 	cout << endl;
-	cout << "HEIGHT: " << miArbol.height() << endl;
 }
