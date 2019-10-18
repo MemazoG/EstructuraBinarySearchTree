@@ -1,10 +1,5 @@
 #pragma once
 #include "NodeT.h"
-#include <vector>
-#include <stack>
-#include <queue>
-#include <iostream>
-
 using namespace std;
 
 class BST {
@@ -23,6 +18,10 @@ private:
 	int countPreorden(NodeT *r);
 	void inordenQueue(NodeT* r, queue<int> &q);
 	NodeT* copyBST(NodeT* r);
+	bool balanceado(NodeT* r);
+
+	//-----PARCIAL 2-----
+	void meteStack(NodeT *r, stack<int> &s);
 
 public:
 	BST();
@@ -43,6 +42,14 @@ public:
 	BST(BST& otro);
 	bool operator==(BST& otro);
 	queue<int> toQueue();
+
+	//TAREA 3
+	int diameter();
+	bool isBalanced();
+
+	//-----PARCIAL 2-----
+	int howManyAreSmallerThanME(int num);
+	int oneChild();
 };
 
 BST::BST() {
@@ -449,3 +456,73 @@ int BST::maxWidth() {
 	return MaxW;
 }
 
+int BST::diameter() {
+	return -1;
+}
+
+bool BST::balanceado(NodeT* r) {
+	return true;
+}
+
+bool BST::isBalanced() {
+	return balanceado(root);
+}
+
+
+
+
+
+//-----PARCIAL 2-----
+void BST::meteStack(NodeT* r, stack<int>& s) {
+	if (r != nullptr) {
+		meteStack(r->getRight(), s);
+		s.push(r->getData());
+		meteStack(r->getLeft(), s);
+	}
+}
+
+//howManyAreSmallerThanME
+int BST::howManyAreSmallerThanME(int num) {
+	if (root == nullptr)
+		return 0;
+
+	stack<int> myStack;
+	meteStack(root, myStack);
+	int count = 0;
+	//TENGO STACK CON LOS NUMS ORDENADOR (MENOR HASTA ARRIBA)
+	while (!myStack.empty()) {
+		if (myStack.top() < num) {
+			count++;
+			myStack.pop();
+		}
+		else {
+			return count;
+		}
+	}
+	return count;
+}
+
+//oneChild
+int BST::oneChild() {
+	if (root == nullptr) {
+		return 0;
+	}
+	queue<NodeT*> q;
+	q.push(root);
+
+	int count = 0;
+	while (!q.empty()) {
+		//SI TIENE UN SOLO HIJO
+		if ( (q.front()->getLeft() == nullptr && q.front()->getRight() != nullptr) || (q.front()->getLeft() != nullptr && q.front()->getRight() == nullptr) ) {
+			count++;
+		}
+		if (q.front()->getLeft() != nullptr) {
+			q.push(q.front()->getLeft());
+		}
+		if (q.front()->getRight() != nullptr) {
+			q.push(q.front()->getRight());
+		}
+		q.pop();
+	}
+	return count;
+}

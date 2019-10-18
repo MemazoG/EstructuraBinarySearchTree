@@ -1,13 +1,15 @@
 // EstructuraBinarySearchTree.cpp : This file contains the 'main' function. Program execution begins and ends there.
-
-#include "BST.h"
+#include <vector>
+#include <stack>
+#include <queue>
 #include <iostream>
 using namespace std;
+#include "BST.h"
 
 int main()
 {
 	BST miArbol;
-	miArbol.add(14);
+	/*miArbol.add(14);
 	miArbol.add(10);
 	miArbol.add(20);
 	miArbol.add(5);
@@ -17,8 +19,27 @@ int main()
 	miArbol.add(25);
 	miArbol.add(23);
 	miArbol.add(22);
-	miArbol.add(26);
+	miArbol.add(26);*/
 
+	/*miArbol.add(15);
+	miArbol.add(7);
+	miArbol.add(19);
+	miArbol.add(5);
+	miArbol.add(10);
+	miArbol.add(3);
+	miArbol.add(17);
+	miArbol.add(22); */
+	miArbol.add(1);
+	miArbol.add(2);
+	miArbol.add(3);
+
+	miArbol.print(2);
+	cout << endl;
+	cout << "Smaller than me " << miArbol.howManyAreSmallerThanME(10) << endl;
+
+	cout << "One Child: " << miArbol.oneChild() << endl;
+
+	/*
 	//PRUEBA toQueue()
 	cout << "*****PRUEBA toQueue()*****" << endl;
 	queue<int> q = miArbol.toQueue();
@@ -44,21 +65,5 @@ int main()
 	tree.add(25);
 	tree.add(23);
 	tree.add(22);
-	tree.add(29);
-
-	if (miArbol==tree) {
-		cout << "SI" << endl;
-	}
-	else
-		cout << "NO" << endl;
-
-	//PRUEBA maxWidth()
-	cout << "*****PRUEBA maxWidth()*****" << endl;
-	cout << miArbol.maxWidth() << endl;
-
-	//PRUEBA CopyConstructor
-	cout << "*****PRUEBA CopyConstructor*****" << endl;
-	BST nuevoBST(miArbol);
-	nuevoBST.print(2);
-	cout << endl;
+	tree.add(29); */
 }
