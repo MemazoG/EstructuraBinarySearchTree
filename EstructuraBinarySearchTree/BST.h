@@ -19,6 +19,7 @@ private:
 	void inordenQueue(NodeT* r, queue<int> &q);
 	NodeT* copyBST(NodeT* r);
 	bool balanceado(NodeT* r);
+	int diam(NodeT* r);
 
 	//-----PARCIAL 2-----
 	void meteStack(NodeT *r, stack<int> &s);
@@ -456,12 +457,29 @@ int BST::maxWidth() {
 	return MaxW;
 }
 
+int BST::diam(NodeT* r) {
+	if (r == nullptr)
+		return 0;
+	int rootDiam = heightTree(r->getLeft()) + heightTree(r->getRight()) + 1;
+	int ld = diam(r->getLeft());
+	int rd = diam(r->getRight());
+	return max(rootDiam, max(ld, rd));
+}
+
 int BST::diameter() {
-	return -1;
+	return diam(root);
 }
 
 bool BST::balanceado(NodeT* r) {
-	return true;
+	if (r == nullptr) {
+		return true;
+	}
+	int hLeft = heightTree(r->getLeft());
+	int hRight = heightTree(r->getRight());
+	if (hLeft-hRight == -1 || hLeft - hRight == 0 || hLeft - hRight == 1) {
+		return true;
+	}
+	return false;
 }
 
 bool BST::isBalanced() {
